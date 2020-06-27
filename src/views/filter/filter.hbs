@@ -1,0 +1,17 @@
+<main class="container p-4">
+    <div class="div-filter p-4">
+    <form action="/map?_method=PUT" method="POST">
+        <div class="form-group">
+          <select class="form-control" name="layer">
+            {{#each layers}}
+              <option value="{{_id}}">{{description}}</option>
+            {{/each}}
+          </select>
+        </p>
+        <label><input type="checkbox" id="cbox1" name="hospitals"> Hospitales</label><br>
+        <label><input type="checkbox" id="cbox2" name="neighborhood"> Barrios</label><br>
+        </div>
+        <button type="submit" class="btn btn-primary mr-auto">Filtrar</button>
+      </form>
+    </div>
+</main>

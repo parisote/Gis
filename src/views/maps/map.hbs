@@ -1,0 +1,184 @@
+<!-- MarkModal -->
+<div class="modal fade" id="markModal" tabindex="-1" role="dialog" aria-labelledby="markModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="markModalLabel">Creacion de marca</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/map/createMark" method="POST">
+            <div class="form-group">
+                <input id="lat" name="lat" type="text" class="form-control" readonly/>
+              </p>
+                <input id="lng" name="lng" type="text" class="form-control" readonly/>
+              </p>
+              <select class="form-control" name="layer">
+                {{#each layers}}
+                  <option value="{{_id}}">{{description}}</option>
+                {{/each}}
+              </select>
+              </p>
+                <input id="name" name="name" type="text" class="form-control" placeholder="Nombre"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MarkModal -->
+<div class="modal fade" id="circleModal" tabindex="-1" role="dialog" aria-labelledby="circleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="circleModalLabel">Creacion de circulo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/map/createCircle" method="POST">
+            <div class="form-group">
+                <input id="c_lat" name="lat" type="text" class="form-control" readonly/>
+              </p>
+                <input id="c_lng" name="lng" type="text" class="form-control" readonly/>
+              </p>
+                <input id="radio" name="radio" type="text" class="form-control" readonly/>
+              </p>
+              <select class="form-control" name="layer">
+                {{#each layers}}
+                  <option value="{{_id}}">{{description}}</option>
+                {{/each}}
+              </select>
+              </p>
+                <input id="name" name="name" type="text" class="form-control" placeholder="Nombre"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Menu Izq -->
+<div class="d-flex" id="wrapper">
+<div class="bg-light border-right" id="sidebar-wrapper">
+      <div class="list-group list-group-flush">
+        <a href="/map/layers" class="list-group-item list-group-item-action bg-light">Crear capa</a>
+        <a href="/filter" class="list-group-item list-group-item-action bg-light">Filtrar mapa</a>
+      </div>
+</div>
+
+
+<!-- MAP -->
+<div id="page-content-wrapper">
+<div id="map-template"></div>
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster-src.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
+<script src="/js/main.js"></script>
+
+{{#if json}}
+<form action="" method="POST">
+  <input id="json" name="json" type="hidden" value='{{json}}'/>
+</form>
+  <script>
+  var json = document.getElementById('json').value;
+  if(json != '')
+  {
+    var jsonG = JSON.parse(json);
+
+    var markerClusters = L.markerClusterGroup();
+
+    for ( var i = 0; i < jsonG.features.length; ++i )
+    {
+      var popup = jsonG.features[i].properties.name;
+
+      var m = L.marker( [jsonG.features[i].geometry.coordinates[1], jsonG.features[i].geometry.coordinates[0]])
+                      .bindPopup( popup );
+
+      markerClusters.addLayer( m );
+    }
+
+    map.addLayer( markerClusters );
+  }
+  </script>
+{{/if}}
+
+{{#if c_json}}
+<form action="" method="POST">
+  <input id="c_json" name="c_json" type="hidden" value='{{c_json}}'/>
+</form>
+  <script>
+  var json = document.getElementById('c_json').value;
+
+  if(json != '')
+  {
+    var jsonG = JSON.parse(json);
+
+    for ( var i = 0; i < jsonG.coordinates.length; ++i )
+    {
+      L.circle([jsonG.coordinates[i][1],jsonG.coordinates[i][0]],{radius:jsonG.coordinates[i][2],color:"#4a192c"}).addTo(map);
+    }
+
+  }
+  </script>
+{{/if}}
+
+{{#if h_json}}
+<form action="" method="POST">
+  <input id="h_json" name="h_json" type="hidden" value='{{h_json}}'/>
+</form>
+  <script>
+  var json = document.getElementById('h_json').value;
+
+  if(json != '')
+  {
+    var jsonH = JSON.parse(json);
+
+    L.geoJSON(jsonH,{
+  onEachFeature: function (feature, layer) {
+    layer.bindPopup(feature.properties.NOMBRE+'<br>Especialidad: '+feature.properties.TIPO_ESPEC+'</p>');
+  }
+  }).addTo(map);
+
+  }
+
+  </script>
+{{/if}}
+
+{{#if n_json}}
+<form action="" method="POST">
+  <input id="n_json" name="n_json" type="hidden" value='{{n_json}}'/>
+</form>
+  <script>
+  var json = document.getElementById('n_json').value;
+
+  if(json != '')
+  {
+    var jsonN = JSON.parse(json);
+
+    L.geoJSON(jsonN,{
+  onEachFeature: function (feature, layer) {
+    layer.bindPopup(feature.properties.name+'<br>Comuna: '+feature.properties.department+'</p>');
+  }
+  }).addTo(map);
+
+  }
+
+  </script>
+{{/if}}
+
+</div>
+</div>

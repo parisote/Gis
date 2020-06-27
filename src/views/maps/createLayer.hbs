@@ -1,0 +1,42 @@
+{{#each errors}}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  {{text}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{{/each}}
+
+<main class="container p-4">
+<div class="col-md-4 mx-auto">
+  <div class="card">
+    <div class="card-header">
+      <h3>Nueva capa</h3>
+    </div>
+    <div class="card-body">
+      <form action="/map/createLayer" method="POST">
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input id="description" class="form-control" name="description" type="text" placeholder="Nombre" autofocus/>
+        </div>
+        <div class="form-group">
+          <label for="code">Codigo</label>
+          <input id="code" class="form-control" name="code" type="text" placeholder="Codigo"/>
+        </div>
+        <div class="form-group">
+          <label for="visibleInput">Publico</label>
+          <select id="visible" class="form-control" name="visible">
+           <option value="true">Si</option>
+           <option value="false">No</option>
+          </select>
+          <small id="visibleHelp" class="form-text text-muted">Sera de vista publica.</small>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-block">
+              Guardar
+          </button>
+        </div>
+      </form>
+  </div>
+</div>
+</main>

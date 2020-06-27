@@ -1,0 +1,38 @@
+{{#each errors}}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  {{text}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{{/each}}
+
+<div class="col-md-4 mx-auto p-4">
+  <div class="card">
+    <div class="card-header">
+      <h3>Editar capa</h3>
+    </div>
+    <div class="card-body">
+      <form action="/map/layer/editLayer/{{layer._id}}?_method=PUT" method="POST">
+        <input type="hidden" name="_method" value="PUT">
+        <div class="form-group">
+          <label for="code">Nombre</label>
+          <input type="text" name="description" class="form-control" value="{{layer.description}}"/>
+        </div>
+        <div class="form-group">
+          <label for="code">Codigo</label>
+          <input class="form-control" name="code" type="text" value="{{layer.code}}"/>
+        </div>
+        <div class="form-group">
+          <label for="code">Publico</label>
+          <textarea name="visible" class="form-control">{{layer.visible}}</textarea>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary btn-block" type="submit">
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
