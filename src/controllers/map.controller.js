@@ -106,9 +106,6 @@ mapCtrl.renderMap = async (req,res) => {
       n_json += '\"features\": [';
 
       for(var i = 0; i < nei.length; i++){
-        if(i != 0)
-          n_json += ',';
-
           if(i != 0)
             n_json += ','
           n_json += '{';

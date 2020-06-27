@@ -147,7 +147,16 @@
   {
     var jsonH = JSON.parse(json);
 
+    var myIcon = L.icon({
+    iconUrl: 'img/marker-icon_hospital.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 40]
+  });
+
     L.geoJSON(jsonH,{
+  pointToLayer: function (feature, latlng) {
+    return L.marker(latlng, {icon: myIcon});
+  },
   onEachFeature: function (feature, layer) {
     layer.bindPopup(feature.properties.NOMBRE+'<br>Especialidad: '+feature.properties.TIPO_ESPEC+'</p>');
   }
@@ -168,6 +177,8 @@
   if(json != '')
   {
     var jsonN = JSON.parse(json);
+
+    console.log("JSON " + jsonN);
 
     L.geoJSON(jsonN,{
   onEachFeature: function (feature, layer) {
