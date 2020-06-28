@@ -191,5 +191,30 @@
   </script>
 {{/if}}
 
+{{#if d_json}}
+<form action="" method="POST">
+  <input id="d_json" name="d_json" type="hidden" value='{{d_json}}'/>
+</form>
+  <script>
+  var json = document.getElementById('d_json').value;
+
+  if(json != '')
+  {
+    var jsonD = JSON.parse(json);
+
+    L.geoJSON(jsonD,{
+  pointToLayer: function (feature, latlng) {
+    return L.marker(latlng);
+  },
+  onEachFeature: function (feature, layer) {
+    layer.bindPopup(feature.properties.name);
+  }
+  }).addTo(map);
+
+  }
+
+  </script>
+{{/if}}
+
 </div>
 </div>

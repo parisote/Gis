@@ -1,8 +1,11 @@
 const mapCtrl = {};
 
+const db = require('mongoose');
+
 const Neighborhood = require('../models/Neighborhood');
 const Hospitals = require('../models/Hospitals');
 const Layer = require('../models/Layer');
+const PatientDiagnosis = require('../models/PatientDiagnosis');
 
 const Map = require('../models/Map');
 const Circle = require('../models/Circle');
@@ -12,6 +15,7 @@ const passport = require('passport');
 var _layer = 0;
 var _hospitals = false;
 var _neighborhood = false;
+var _diagnosis = false;
 
 mapCtrl.createMark = async (req,res) => {
   const { lat, lng, layer, name } = req.body;
@@ -125,17 +129,47 @@ mapCtrl.renderMap = async (req,res) => {
       n_json += ']}';
     }
 
+    if(_diagnosis)
+    {
+      const dia = await PatientDiagnosis.find({p_id:207360});
+
+      var d_json = '';
+      d_json += '{';
+      d_json += '\"type\": \"FeatureCollection\",';
+      d_json += '\"features\": [';
+
+      for(var i = 0; i < dia.length; i++){
+          if(i != 0)
+            d_json += ','
+          d_json += '{';
+          d_json += '\"type\": \"Feature\",'
+          d_json += '\"geometry\": {'
+          d_json += '\"type\": \"Point\",'
+          d_json += '\"coordinates\":['
+          d_json += JSON.stringify(dia[i].geo);
+          d_json += ']},'
+          d_json += '\"properties\": {'
+          d_json += '\"name\":\"'+ dia[i].nam + '\",'
+          d_json += '}'
+          d_json += '}'
+      }
+      d_json += ']}';
+
+      console.log("DIAG " + d_json);
+    }
+
     const layers = await Layer.find().or([{visible:"true"},{user:req.user.id}]);
 
-    res.render('maps/map', {json, c_json, layers, h_json, n_json});
+    res.render('maps/map', {json, c_json, layers, h_json, n_json, d_json});
 };
 
 mapCtrl.renderMapFilter = (req,res) => {
-  const { layer, hospitals, neighborhood } = req.body;
+  const { layer, hospitals, neighborhood, diagnosis } = req.body;
 
   _layer = layer;
   _hospitals = hospitals;
   _neighborhood = neighborhood;
+  _diagnosis = diagnosis;
 
   res.redirect('/map');
 };
@@ -207,6 +241,7 @@ mapCtrl.cleanSession = (req,res) => {
   _layer = '0';
   _hospitals = false;
   _neighborhood = false;
+  _diagnosis = false;
 }
 
 module.exports = mapCtrl;
