@@ -149,7 +149,7 @@ mapCtrl.renderMap = async (req,res) => {
           d_json += JSON.stringify(dia[i].geo);
           d_json += '},'
           d_json += '\"properties\": {'
-          d_json += '\"name\":\"'+ dia[i].name + '\"'
+          d_json += '\"name\":\"'+ dia[i].person_id + '\"'
           d_json += '}'
           d_json += '}'
       }
