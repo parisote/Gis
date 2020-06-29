@@ -1,11 +1,11 @@
 const { Schema, model } = require('mongoose');
 
 const pDiagSchema = new Schema({
-  p_id:
+  person_id:
   {
     type: Number
   },
-  nam:
+  name:
   {
     type: String
   },

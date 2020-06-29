@@ -131,7 +131,7 @@ mapCtrl.renderMap = async (req,res) => {
 
     if(_diagnosis)
     {
-      const dia = await PatientDiagnosis.find({p_id:207360});
+      const dia = await PatientDiagnosis.find();
 
       var d_json = '';
       d_json += '{';
@@ -145,17 +145,15 @@ mapCtrl.renderMap = async (req,res) => {
           d_json += '\"type\": \"Feature\",'
           d_json += '\"geometry\": {'
           d_json += '\"type\": \"Point\",'
-          d_json += '\"coordinates\":['
+          d_json += '\"coordinates\":'
           d_json += JSON.stringify(dia[i].geo);
-          d_json += ']},'
+          d_json += '},'
           d_json += '\"properties\": {'
-          d_json += '\"name\":\"'+ dia[i].nam + '\",'
+          d_json += '\"name\":\"'+ dia[i].name + '\"'
           d_json += '}'
           d_json += '}'
       }
       d_json += ']}';
-
-      console.log("DIAG " + d_json);
     }
 
     const layers = await Layer.find().or([{visible:"true"},{user:req.user.id}]);
