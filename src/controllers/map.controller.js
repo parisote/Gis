@@ -165,16 +165,22 @@ mapCtrl.renderMap = async (req,res) => {
 mapCtrl.renderMapFilter = (req,res) => {
   const { layer, hospitals, neighborhood, diagnosis } = req.body;
 
+  if(layer)
+    res.cookie('layer', layer, { expires: new Date(Date.now() + 900000), httpOnly: true });
+
   if(hospitals)
     res.cookie('hospitals', hospitals, { expires: new Date(Date.now() + 900000), httpOnly: true });
 
   if(neighborhood)
     res.cookie('neighborhood', neighborhood, { expires: new Date(Date.now() + 900000), httpOnly: true });
 
-  _layer = layer;
+  if(diagnosis)
+    res.cookie('diagnosis', diagnosis, { expires: new Date(Date.now() + 900000), httpOnly: true });
+
+  //_layer = layer;
   //_hospitals = hospitals;
   //_neighborhood = neighborhood;
-  _diagnosis = diagnosis;
+  //_diagnosis = diagnosis;
 
   res.redirect('/map');
 };
