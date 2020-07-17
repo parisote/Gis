@@ -130,6 +130,15 @@ mapCtrl.renderMap = async (req,res) => {
       n_json += ']}';
     }
 
+    const d = new PatientDiagnosis({
+      persoin_id: 12,
+      name: "asd",
+      diagnosis: "b",
+      geo: [1,1]
+    });
+
+    await d.save();
+
     if(req.cookies.diagnosis)
     {
       const dia = await PatientDiagnosis.find();
