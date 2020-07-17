@@ -56,7 +56,7 @@ usersCtrl.singin = passport.authenticate('local', {
 });
 
 usersCtrl.logout = (req,res) => {
-  cleanSession();
+  cleanSession(req,res);
   req.logout();
   res.redirect('/user/singin');
 };
