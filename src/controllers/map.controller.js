@@ -134,6 +134,8 @@ mapCtrl.renderMap = async (req,res) => {
     {
       const dia = await PatientDiagnosis.find();
 
+      console.log("CANT " + dia);
+
       var d_json = '';
       d_json += '{';
       d_json += '\"type\": \"FeatureCollection\",';
