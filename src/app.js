@@ -8,6 +8,8 @@ const method_override = require('method-override');
 const flash = require('connect-flash');
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
 
+const cookieParser = require('cookie-parser');
+
 //initialization
 const app = express();
 
@@ -25,6 +27,7 @@ app.set('view engine', '.hbs');
 
 //middleware
 app.use(express.urlencoded({extended: false}));
+app.use(cookieParser());
 app.use(method_override('_method'));
 app.use(express.json());
 app.use(session({

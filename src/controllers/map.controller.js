@@ -83,7 +83,8 @@ mapCtrl.renderMap = async (req,res) => {
 
     }
 
-    if(_hospitals){
+    console.log(req.cookies.hospitals);
+    if(req.cookies.hospitals){
       const hosp = await Hospitals.find();
 
       var h_json = '';
@@ -101,7 +102,7 @@ mapCtrl.renderMap = async (req,res) => {
       h_json += ']}';
     }
 
-    if(_neighborhood){
+    if(req.cookies.neighborhood){
       const nei = await Neighborhood.find();
 
       var n_json = '';
@@ -129,7 +130,7 @@ mapCtrl.renderMap = async (req,res) => {
       n_json += ']}';
     }
 
-    if(_diagnosis)
+    if(req.cookies.diagnosis)
     {
       const dia = await PatientDiagnosis.find();
 
@@ -164,9 +165,15 @@ mapCtrl.renderMap = async (req,res) => {
 mapCtrl.renderMapFilter = (req,res) => {
   const { layer, hospitals, neighborhood, diagnosis } = req.body;
 
+  if(hospitals)
+    res.cookie('hospitals', hospitals, { expires: new Date(Date.now() + 900000), httpOnly: true });
+
+  if(neighborhood)
+    res.cookie('neighborhood', neighborhood, { expires: new Date(Date.now() + 900000), httpOnly: true });
+
   _layer = layer;
-  _hospitals = hospitals;
-  _neighborhood = neighborhood;
+  //_hospitals = hospitals;
+  //_neighborhood = neighborhood;
   _diagnosis = diagnosis;
 
   res.redirect('/map');
