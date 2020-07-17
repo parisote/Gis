@@ -257,10 +257,10 @@ mapCtrl.createCircle = async (req,res) => {
 };
 
 mapCtrl.cleanSession = (req,res) => {
-  _layer = '0';
-  _hospitals = false;
-  _neighborhood = false;
-  _diagnosis = false;
+  res.cookie('layer', false, { expires: new Date(Date.now() + 1), httpOnly: true });
+  res.cookie('hospitals', false, { expires: new Date(Date.now() + 1), httpOnly: true });
+  res.cookie('neighborhood', false, { expires: new Date(Date.now() + 1), httpOnly: true });
+  res.cookie('diagnosis', false, { expires: new Date(Date.now() + 1), httpOnly: true });
 }
 
 module.exports = mapCtrl;
