@@ -35,8 +35,8 @@ mapCtrl.createMark = async (req,res) => {
 };
 
 mapCtrl.renderMap = async (req,res) => {
-  if(_layer != 0){
-    const marks = await Map.find({layer:_layer});
+  if(req.cookies.layer != 0){
+    const marks = await Map.find({layer:req.cookies.layer});
 
     var json = '';
     json += '{';
@@ -64,7 +64,7 @@ mapCtrl.renderMap = async (req,res) => {
     json += ']}';
 
     var c_json = '';
-    const circle = await Circle.find({layer:_layer});
+    const circle = await Circle.find({layer:req.cookies.layer});
     if(circle.length > 0)
     {
       c_json += '{';
@@ -83,8 +83,7 @@ mapCtrl.renderMap = async (req,res) => {
 
     }
 
-    console.log(req.cookies.hospitals);
-    if(req.cookies.hospitals){
+    if(req.cookies.hospitals == 'on'){
       const hosp = await Hospitals.find();
 
       var h_json = '';
@@ -102,7 +101,7 @@ mapCtrl.renderMap = async (req,res) => {
       h_json += ']}';
     }
 
-    if(req.cookies.neighborhood){
+    if(req.cookies.neighborhood == 'on'){
       const nei = await Neighborhood.find();
 
       var n_json = '';
@@ -130,11 +129,9 @@ mapCtrl.renderMap = async (req,res) => {
       n_json += ']}';
     }
 
-    if(req.cookies.diagnosis)
+    if(req.cookies.diagnosis == 'on')
     {
       const dia = await PatientDiagnosis.find();
-
-      console.log("CANT " + dia);
 
       var d_json = '';
       d_json += '{';
@@ -167,17 +164,26 @@ mapCtrl.renderMap = async (req,res) => {
 mapCtrl.renderMapFilter = (req,res) => {
   const { layer, hospitals, neighborhood, diagnosis } = req.body;
 
-  if(layer)
+  if(layer){
     res.cookie('layer', layer, { expires: new Date(Date.now() + 900000), httpOnly: true });
+  } else
+    res.cookie('layer', false, { expires: new Date(Date.now() + 900000), httpOnly: true });
 
-  if(hospitals)
+  if(hospitals){
     res.cookie('hospitals', hospitals, { expires: new Date(Date.now() + 900000), httpOnly: true });
+  }else
+    res.cookie('hospitals', false, { expires: new Date(Date.now() + 900000), httpOnly: true });
 
-  if(neighborhood)
+  if(neighborhood){
     res.cookie('neighborhood', neighborhood, { expires: new Date(Date.now() + 900000), httpOnly: true });
+  }else
+    res.cookie('neighborhood', false, { expires: new Date(Date.now() + 900000), httpOnly: true });
 
-  if(diagnosis)
+  if(diagnosis){
     res.cookie('diagnosis', diagnosis, { expires: new Date(Date.now() + 900000), httpOnly: true });
+  }else
+    res.cookie('diagnosis', false, { expires: new Date(Date.now() + 900000), httpOnly: true });
+
 
   //_layer = layer;
   //_hospitals = hospitals;
