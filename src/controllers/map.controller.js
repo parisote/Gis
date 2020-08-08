@@ -9,30 +9,9 @@ const PatientDiagnosis = require('../models/PatientDiagnosis');
 
 const Map = require('../models/Map');
 const Circle = require('../models/Circle');
+const Rectangle = require('../models/Rectangle')
 
 const passport = require('passport');
-
-var _layer = 0;
-var _hospitals = false;
-var _neighborhood = false;
-var _diagnosis = false;
-
-mapCtrl.createMark = async (req,res) => {
-  const { lat, lng, layer, name } = req.body;
-  const errors = [];
-
-  const newMark = new Map({
-    lat: lat,
-    lng: lng,
-    layer: layer,
-    name: name
-  });
-
-  await newMark.save();
-
-  req.flash('success_msg','Marca creada correctamente.');
-  res.redirect('/map');
-};
 
 mapCtrl.renderMap = async (req,res) => {
   if(req.cookies.layer != 0){
@@ -81,6 +60,40 @@ mapCtrl.renderMap = async (req,res) => {
       c_json += "]}"
     }
 
+    var r_json = '';
+    const rectangle = await Rectangle.find({layer:req.cookies.layer});
+    if(rectangle.length > 0)
+    {
+      r_json += '{';
+      r_json += '\"type\": \"FeatureCollection\",';
+      r_json += '\"features\": [';
+      for(var z = 0; z < rectangle.length; z++)
+      {
+        if(z != 0)
+          r_json += ','
+        r_json += '{';
+        r_json += '\"type\": \"Feature\",'
+        r_json += '\"geometry\": {'
+        r_json += '\"type\": \"Polygon\",'
+        r_json += '\"coordinates\": [['
+        r_json += '['+rectangle[z].lng1+','
+        r_json += rectangle[z].lat1+'],'
+        r_json += '['+rectangle[z].lng2+','
+        r_json += rectangle[z].lat2+'],'
+        r_json += '['+rectangle[z].lng3+','
+        r_json += rectangle[z].lat3+'],'
+        r_json += '['+rectangle[z].lng4+','
+        r_json += rectangle[z].lat4+']'
+        r_json += ']]'
+        r_json += '},'
+        r_json += '\"properties\": {'
+        r_json += '\"name\":\"'+ rectangle[z].name + '\"'
+        r_json += '}'
+        r_json += '}'
+      }
+      r_json += "]}"
+    }
+    console.log(r_json)
     }
 
     if(req.cookies.hospitals == 'on'){
@@ -158,7 +171,7 @@ mapCtrl.renderMap = async (req,res) => {
 
     const layers = await Layer.find().or([{visible:"true"},{user:req.user.id}]);
 
-    res.render('maps/map', {json, c_json, layers, h_json, n_json, d_json});
+    res.render('maps/map', {json, c_json, layers, h_json, n_json, d_json, r_json});
 };
 
 mapCtrl.renderMapFilter = (req,res) => {
@@ -183,12 +196,6 @@ mapCtrl.renderMapFilter = (req,res) => {
     res.cookie('diagnosis', diagnosis, { expires: new Date(Date.now() + 900000), httpOnly: true });
   }else
     res.cookie('diagnosis', false, { expires: new Date(Date.now() + 900000), httpOnly: true });
-
-
-  //_layer = layer;
-  //_hospitals = hospitals;
-  //_neighborhood = neighborhood;
-  //_diagnosis = diagnosis;
 
   res.redirect('/map');
 };
@@ -255,6 +262,46 @@ mapCtrl.createCircle = async (req,res) => {
   req.flash('success_msg','Circulo creada correctamente.');
   res.redirect('/map');
 };
+
+mapCtrl.createMark = async (req,res) => {
+  const { lat, lng, layer, name } = req.body;
+  const errors = [];
+
+  const newMark = new Map({
+    lat: lat,
+    lng: lng,
+    layer: layer,
+    name: name
+  });
+
+  await newMark.save();
+
+  req.flash('success_msg','Marca creada correctamente.');
+  res.redirect('/map');
+};
+
+mapCtrl.createRectangle = async (req,res) => {
+  const { point_1, point_2, point_3, point_4, point_5, point_6, point_7, point_8, layer,name } = req.body;
+  const errors = [];
+
+  const newRectangle = new Rectangle({
+    lat1: point_1,
+    lng1: point_2,
+    lat2: point_3,
+    lng2: point_4,
+    lat3: point_5,
+    lng3: point_6,
+    lat4: point_7,
+    lng4: point_8,
+    layer: layer,
+    name: name
+  });
+
+  await newRectangle.save();
+
+  req.flash('success_msg','Circulo creada correctamente.');
+  res.redirect('/map');
+}
 
 mapCtrl.cleanSession = (req,res) => {
   res.cookie('layer', false, { expires: new Date(Date.now() + 1), httpOnly: true });

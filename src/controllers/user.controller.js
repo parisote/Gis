@@ -22,6 +22,7 @@ usersCtrl.singup = async (req,res) => {
     }
     if(errors.length > 0){
       //deberia pushear los errores al frontend
+      res.status(500);
       res.render('users/singup',{ errors: errors});
     } else {
       const emailUser = await User.findOne({email:email});

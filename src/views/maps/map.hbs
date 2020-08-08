@@ -70,6 +70,46 @@
   </div>
 </div>
 
+<!-- RectangleModal -->
+<div class="modal fade" id="rectangleModal" tabindex="-1" role="dialog" aria-labelledby="rectangleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rectangleModalLabel">Creacion de rectangulo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/map/createRectangle" method="POST">
+            <div class="form-group">
+                <input id="point_1" name="point_1" type="hidden" class="form-control" readonly/>
+                <input id="point_2" name="point_2" type="hidden" class="form-control" readonly/>
+                <input id="point_3" name="point_3" type="hidden" class="form-control" readonly/>
+                <input id="point_4" name="point_4" type="hidden" class="form-control" readonly/>
+                <input id="point_5" name="point_5" type="hidden" class="form-control" readonly/>
+                <input id="point_6" name="point_6" type="hidden" class="form-control" readonly/>
+                <input id="point_7" name="point_7" type="hidden" class="form-control" readonly/>
+                <input id="point_8" name="point_8" type="hidden" class="form-control" readonly/>
+              <select class="form-control" name="layer">
+                {{#each layers}}
+                  <option value="{{_id}}">{{description}}</option>
+                {{/each}}
+              </select>
+              </p>
+                <input id="name" name="name" type="text" class="form-control" placeholder="Nombre"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <!-- Menu Izq -->
 <div class="d-flex" id="wrapper">

@@ -37,8 +37,17 @@ map.on('draw:created', function(e) {
 
   if(type === 'rectangle'){
     $("#rectangleModal").modal("show");
-    var cmplat = document.getElementById('lat').value = layer._latlngs[0][0].lat;
-    var cmplen = document.getElementById('lng').value = layer._latlngs[0][0].lng;
+    var point1 = document.getElementById('point_1').value = layer._latlngs[0][0].lng;
+    var point2 = document.getElementById('point_2').value = layer._latlngs[0][0].lat;
+
+    var point3 = document.getElementById('point_3').value = layer._latlngs[0][1].lng;
+    var point4 = document.getElementById('point_4').value = layer._latlngs[0][1].lat;
+
+    var point5 = document.getElementById('point_5').value = layer._latlngs[0][2].lat;
+    var point6 = document.getElementById('point_6').value = layer._latlngs[0][2].lng;
+
+    var point7 = document.getElementById('point_7').value = layer._latlngs[0][3].lat;
+    var point8 = document.getElementById('point_8').value = layer._latlngs[0][3].lng;
   }
 
   if(type === 'polygon'){
