@@ -10,6 +10,7 @@ const PatientDiagnosis = require('../models/PatientDiagnosis');
 const Map = require('../models/Map');
 const Circle = require('../models/Circle');
 const Rectangle = require('../models/Rectangle')
+const Polygon = require('../models/Polygon')
 
 const passport = require('passport');
 
@@ -73,27 +74,64 @@ mapCtrl.renderMap = async (req,res) => {
           r_json += ','
         r_json += '{';
         r_json += '\"type\": \"Feature\",'
+        r_json += '\"properties\": {'
+        r_json += '\"name\":\"'+ rectangle[z].name + '\"'
+        r_json += '},'
         r_json += '\"geometry\": {'
         r_json += '\"type\": \"Polygon\",'
         r_json += '\"coordinates\": [['
-        r_json += '['+rectangle[z].lng1+','
-        r_json += rectangle[z].lat1+'],'
-        r_json += '['+rectangle[z].lng2+','
-        r_json += rectangle[z].lat2+'],'
+        // para geojson
+        r_json += '['+rectangle[z].lat1+','
+        r_json += rectangle[z].lng1+'],'
+        r_json += '['+rectangle[z].lat2+','
+        r_json += rectangle[z].lng2+'],'
         r_json += '['+rectangle[z].lng3+','
         r_json += rectangle[z].lat3+'],'
         r_json += '['+rectangle[z].lng4+','
         r_json += rectangle[z].lat4+']'
+
+        /* 4 polygon
+        r_json += '['+rectangle[z].lng1+','
+        r_json += rectangle[z].lat1+'],'
+        r_json += '['+rectangle[z].lng2+','
+        r_json += rectangle[z].lat2+'],'
+        r_json += '['+rectangle[z].lat3+','
+        r_json += rectangle[z].lng3+'],'
+        r_json += '['+rectangle[z].lat4+','
+        r_json += rectangle[z].lng4+']'
+        */
         r_json += ']]'
-        r_json += '},'
-        r_json += '\"properties\": {'
-        r_json += '\"name\":\"'+ rectangle[z].name + '\"'
         r_json += '}'
         r_json += '}'
       }
       r_json += "]}"
     }
-    console.log(r_json)
+
+    var p_json = '';
+    const polygon = await Polygon.find({layer:req.cookies.layer});
+    if(polygon.length > 0)
+    {
+      p_json += '{';
+      p_json += '\"type\": \"FeatureCollection\",';
+      p_json += '\"features\": [';
+      for(var z = 0; z < polygon.length; z++)
+      {
+        if(z != 0)
+          p_json += ','
+        p_json += '{';
+        p_json += '\"type\": \"Feature\",'
+        p_json += '\"properties\": {'
+        p_json += '\"name\":\"'+ polygon[z].name + '\"'
+        p_json += '},'
+        p_json += '\"geometry\": {'
+        p_json += '\"type\": \"Polygon\",'
+        p_json += '\"coordinates\": '
+        p_json += polygon[z].latlngs
+        p_json += '}'
+        p_json += '}'
+      }
+      p_json += "]}"
+    }
     }
 
     if(req.cookies.hospitals == 'on'){
@@ -138,7 +176,6 @@ mapCtrl.renderMap = async (req,res) => {
           n_json += '}'
           n_json += '}'
       }
-
       n_json += ']}';
     }
 
@@ -171,7 +208,7 @@ mapCtrl.renderMap = async (req,res) => {
 
     const layers = await Layer.find().or([{visible:"true"},{user:req.user.id}]);
 
-    res.render('maps/map', {json, c_json, layers, h_json, n_json, d_json, r_json});
+    res.render('maps/map', {json, c_json, layers, h_json, n_json, d_json, r_json, p_json});
 };
 
 mapCtrl.renderMapFilter = (req,res) => {
@@ -300,6 +337,22 @@ mapCtrl.createRectangle = async (req,res) => {
   await newRectangle.save();
 
   req.flash('success_msg','Circulo creada correctamente.');
+  res.redirect('/map');
+}
+
+mapCtrl.createPolygon = async (req,res) => {
+  const { p_1, layer, name } = req.body;
+  const errors = [];
+
+  const newPolygon = new Polygon({
+    latlngs: p_1,
+    layer: layer,
+    name: name
+  });
+
+  await newPolygon.save();
+
+  req.flash('success_msg','Poligono creada correctamente.');
   res.redirect('/map');
 }
 

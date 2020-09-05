@@ -109,6 +109,38 @@
   </div>
 </div>
 
+<!-- polygonModal -->
+<div class="modal fade" id="polygonModal" tabindex="-1" role="dialog" aria-labelledby="polygonModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="polygonModalLabel">Creacion de poligono</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/map/createPolygon" method="POST">
+            <div class="form-group">
+                <input id="p_1" name="p_1" type="hidden" class="form-control" readonly/>
+              <select class="form-control" name="layer">
+                {{#each layers}}
+                  <option value="{{_id}}">{{description}}</option>
+                {{/each}}
+              </select>
+              </p>
+                <input id="name" name="name" type="text" class="form-control" placeholder="Nombre"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 <!-- Menu Izq -->
@@ -218,11 +250,10 @@
   {
     var jsonN = JSON.parse(json);
 
-    console.log("JSON " + jsonN);
-
     L.geoJSON(jsonN,{
   onEachFeature: function (feature, layer) {
     layer.bindPopup(feature.properties.name+'<br>Comuna: '+feature.properties.department+'</p>');
+
   }
   }).addTo(map);
 
@@ -251,6 +282,69 @@
   }
   }).addTo(map);
 
+  }
+
+  </script>
+{{/if}}
+
+{{#if r_json}}
+<form action="" method="POST">
+  <input id="r_json" name="r_json" type="hidden" value='{{r_json}}'/>
+</form>
+  <script>
+  var json = document.getElementById('r_json').value;
+
+  if(json != '')
+  {
+    var jsonR = JSON.parse(json);
+
+    L.geoJSON(jsonR,{
+  onEachFeature: function (feature, layer) {
+    layer.bindPopup(feature.properties.name);
+  }
+}).addTo(map);
+
+    /*if(jsonR != ""){
+      var arrayFeature = jsonR.features;
+      let arrayItems = [[]];
+      for (var i = 0; i < arrayFeature.length; i++) {
+        var coordinates = arrayFeature[i].geometry.coordinates;
+        let arrayItem = [];
+        arrayItem.push(coordinates[0][0])
+        arrayItem.push(coordinates[0][1])
+        arrayItem.push(coordinates[0][2])
+        arrayItem.push(coordinates[0][3])
+        arrayItems.push(arrayItem)
+      }
+      var polygon = L.polygon(arrayItems, {color: 'blue'}).addTo(map);
+    }*/
+  }
+
+  </script>
+{{/if}}
+
+{{#if p_json}}
+<form action="" method="POST">
+  <input id="p_json" name="p_json" type="hidden" value='{{p_json}}'/>
+</form>
+  <script>
+  var json = document.getElementById('p_json').value;
+
+  if(json != '')
+  {
+    var jsonP = JSON.parse(json);
+
+    L.geoJSON(jsonP,{
+  onEachFeature: function (feature, layer) {
+    layer.bindPopup(feature.properties.name);
+  },
+  style: {
+    color: "#1b5e20",
+    opacity: 0.8,
+    fillColor: '#4c8c4a',
+    fillOpacity: 0.5
+  }
+}).addTo(map);
   }
 
   </script>

@@ -13,6 +13,7 @@ const { renderMap,
   deleteLayer,
   createCircle,
   createRectangle,
+  createPolygon,
   renderMapFilter } = require('../controllers/map.controller');
 
 //MAP
@@ -23,6 +24,7 @@ router.put('/', isAuthenticated, renderMapFilter);
 router.post('/createMark', isAuthenticated, createMark);
 router.post('/createCircle', isAuthenticated, createCircle);
 router.post('/createRectangle', isAuthenticated, createRectangle);
+router.post('/createPolygon', isAuthenticated, createPolygon);
 
 //LAYERS
 router.get('/layers', isAuthenticated, renderLayers);

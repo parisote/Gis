@@ -51,8 +51,16 @@ map.on('draw:created', function(e) {
   }
 
   if(type === 'polygon'){
-    console.log(layer)
-    console.log(layer._latlngs[0].length)
+    $("#polygonModal").modal("show");
+    var array = layer._latlngs[0]
+    var json = "[[";
+    for (var i = 0; i < array.length; i++) {
+      if(i > 0)
+        json+= ","
+      json += "[" + array[i].lng + "," + array[i].lat + "]"
+    }
+    json += "]]";
+    var point1 = document.getElementById('p_1').value = json;
   }
 
   if(type === 'circle'){
