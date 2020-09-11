@@ -1,4 +1,4 @@
-version: '2.4'
+version: '2.1'
 services:
   api:
     build: .
@@ -12,7 +12,7 @@ services:
     container_name: "mongo-gis"
     ports:
       - "27017:27017"
-  networks:
-    default:
-      external:
-        name: gis-networks
+networks:
+  default:
+    external:
+      name: gis-networks
