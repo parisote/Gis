@@ -1,5 +1,5 @@
 version: '2.1'
-service:
+services:
   api:
     build: .
     container_name: "gis-api"
@@ -8,7 +8,7 @@ service:
     ports:
       - "4000:4000"
   mongo:
-    images: "mongo"
+    image: "mongo"
     container_name: "mongo-gis"
     ports:
       - "27017:27017"
