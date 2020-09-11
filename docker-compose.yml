@@ -1,0 +1,18 @@
+version: '3'
+service:
+  api:
+    build: .
+    container_name: "gis-api"
+    links:
+      - mongo
+    ports:
+      - "4000:4000"
+  mongo:
+    images: "mongo"
+    container_name: "mongo-gis"
+    ports:
+      - "27017:27017"
+  networks:
+    default:
+      external:
+        name: gis-networks
