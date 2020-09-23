@@ -13,7 +13,7 @@ services:
     ports:
       - "27017:27017"
 
-        node-exporter:
+  node-exporter:
     image: "prom/node-exporter"
     container_name : "node_exporter_gis"
     ports:
