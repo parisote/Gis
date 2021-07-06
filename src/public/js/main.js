@@ -1,7 +1,8 @@
+
 const map = L.map('map-template').setView([-34.618644,-58.4615551], 12);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+L.tileLayer('https://tile.jawg.io/0d71a640-070e-4937-b2ba-175784dab4ca/{z}/{x}/{y}{r}.png?access-token=nBw1CcqrzWiscwJLG3pdiff3MEcEOSMAQwfnkBTc0S1kmmYtYTHzQnKdQM1jyWw9', {
+    attribution: '<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors'
 }).addTo(map);
 
 var drawnItems = new L.FeatureGroup();
