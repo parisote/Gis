@@ -1,5 +1,5 @@
 # Gis
-Demo de proyecto sobre plataforma de georeferenciacion sobre distintos tipos de posibles capas y elementos.
+Demo de proyecto sobre plataforma de georreferenciacion sobre distintos tipos de posibles capas y elementos.
 
 ```bash
 npm i
